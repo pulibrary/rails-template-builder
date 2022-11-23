@@ -29,4 +29,4 @@ the `config.yml` in a subdirectory, but it gets complicated.
 
 ## Current status
 
-This is a proof-of-concept, so instead of diffing against a `rails-template` submodule, we diff against a `rails-template-in-progress` subdirectory.
+**This is a proof-of-concept**, so instead of diffing against a `rails-template` submodule, we diff against a subdirectory.
