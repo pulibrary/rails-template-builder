@@ -29,4 +29,6 @@ the `config.yml` in a subdirectory, but it gets complicated.
 
 ## Current status
 
-**This is a proof-of-concept**, so instead of diffing against a `rails-template` submodule, we diff against a subdirectory.
+**This is a proof-of-concept:**
+- Instead of diffing against a `rails-template` submodule, we diff against a subdirectory.
+- Right now, it doesn't do much besides init rails and then use rubocop to auto-correct.
