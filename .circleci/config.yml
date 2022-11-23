@@ -3,7 +3,7 @@
 
 version: 2
 jobs:
-  docker-build:
+  build:
     working_directory: /rails-template
     docker:
       # From https://registry.hub.docker.com/_/docker/tags
