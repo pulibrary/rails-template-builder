@@ -53,7 +53,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt update && sudo apt install postgresql-client libmsgpack-dev
-      - install_dependencies
+      - install-rails-dependencies
       - persist_to_workspace:
           root: &root '~/work'
           paths: '*'
