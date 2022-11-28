@@ -2,9 +2,35 @@
 # Removed docker image caching for simplicity.
 
 version: 2
+
+commands:
+  install-rails-dependencies:
+    steps:
+      - run: gem install bundler -v '2.3.11'
+      - run: cp Gemfile.lock Gemfile.lock.bak
+      - restore_cache:
+          keys: &gem_key rails_template-cimg-{{ checksum "Gemfile.lock.bak" }}
+      - run: bundle install --path ./vendor/bundle
+      - save_cache:
+          key: *gem_key
+          paths:
+            - ./vendor/bundle
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          key: &yarn_key rails_template-yarn-cimg-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install NPM Dependencies via Yarn
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: *yarn_key
+          paths:
+            - ~/.cache/yarn
+
+
 jobs:
   docker-build:
-    working_directory: /rails-template
+    working_directory: ~/work
     docker:
       # From https://registry.hub.docker.com/_/docker/tags
       - image: docker:20.10.21-git
@@ -15,10 +41,45 @@ jobs:
           name: Run test
           command: |
             ./test-docker.sh
+  # TODO: There should be a way to check that these checks on the template
+  # are also included inside the template itself.
+  rails-build:
+    working_directory: ~/work
+    docker:
+      - &ruby_docker
+        image: cimg/ruby:3.0.3-browsers
+        environment:
+          RAILS_ENV: test
+    steps:
+      - checkout
+      - run: sudo apt update && sudo apt install postgresql-client libmsgpack-dev
+      - install_dependencies
+      - persist_to_workspace:
+          root: &root '~/work'
+          paths: '*'
+  rubocop:
+    working_directory: *root
+    docker:
+      - *ruby_docker
+    steps:
+      - attach_workspace:
+          at: *root
+      - run:
+          name: Run rubocop
+          command: bundle exec rubocop
 
 workflows:
   version: 2
   parallel-docker-rails:
     jobs:
       - docker-build
-      # TODO: rails
+      - rails-build
+      - rubocop:
+          requires:
+            - rails-build
+      # - test:
+      #     requires:
+      #       - rails-build
+      # - eslint:
+      #     requires:
+      #       - rails-build
