@@ -74,7 +74,7 @@ workflows:
   version: 2
   parallel-docker-rails:
     jobs:
-      - docker-build
+      # - docker-build
       - rails-build
       # - rubocop:
       #     requires:
