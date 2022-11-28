@@ -53,7 +53,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt update && sudo apt install postgresql-client libmsgpack-dev
-      - install_rails_dependencies
+      # - install_rails_dependencies
       - persist_to_workspace:
           root: &root '~/work'
           paths: '*'
@@ -74,9 +74,9 @@ workflows:
     jobs:
       - docker-build
       - rails-build
-      - rubocop:
-          requires:
-            - rails-build
+      # - rubocop:
+      #     requires:
+      #       - rails-build
       # - test:
       #     requires:
       #       - rails-build
