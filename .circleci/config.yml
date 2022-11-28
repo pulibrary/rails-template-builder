@@ -3,7 +3,7 @@
 
 version: 2
 jobs:
-  build:
+  docker-build:
     working_directory: /rails-template
     docker:
       # From https://registry.hub.docker.com/_/docker/tags
@@ -15,3 +15,10 @@ jobs:
           name: Run test
           command: |
             ./test-docker.sh
+
+workflows:
+  version: 2
+  parallel-docker-rails:
+    jobs:
+      - docker-build
+      # TODO: rails
