@@ -4,7 +4,7 @@
 version: 2
 
 commands:
-  rails_dependencies:
+  install_dependencies:
     steps:
       - run: gem install bundler -v '2.3.11'
       - run: cp Gemfile.lock Gemfile.lock.bak
@@ -46,7 +46,7 @@ jobs:
   # TODO: There should be a way to check that these checks on the template
   # are also included inside the template itself.
   rails-build:
-    working_directory: ~/work
+    working_directory: ~/rails_template
     docker:
       - &ruby_docker
         image: cimg/ruby:3.0.3-browsers
@@ -55,9 +55,9 @@ jobs:
     steps:
       - checkout
       - run: sudo apt update && sudo apt install postgresql-client libmsgpack-dev
-      - rails_dependencies
+      - install_dependencies
       - persist_to_workspace:
-          root: &root '~/work'
+          root: &root '~/rails_template'
           paths: '*'
   rubocop:
     working_directory: *root
