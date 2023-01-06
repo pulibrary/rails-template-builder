@@ -1,5 +1,6 @@
 # rails-template-builder
-EXPERIMENTAL - Use Docker to build our [`rails-template`](https://github.com/pulibrary/rails-template).
+
+**Consensus at Jan 6, 2023 meeting that this is low frequency, and folks should just follow human-readable instructions when starting a new repo. Archiving this repo.**
 
 ## Problem
 
